@@ -2,39 +2,6 @@
 
 from tkinter import *
 from datetime import *
-from apscheduler.schedulers.blocking import BlockingScheduler
-
-'''
-scheduler = BlockingScheduler()
-
-#  Ignorer
-
-
-def choices(txt):
-    if txt is "Hard":
-        @scheduler.scheduled_job('interval', seconds=3)
-        def reminder_hard():
-            print("Hard")
-        scheduler.start()
-    if txt is "Medium":
-        @scheduler.scheduled_job('interval', seconds=5)
-        def reminder_medium():
-            print("Medium")
-        scheduler.start()
-    if txt is "Easy":
-        @scheduler.scheduled_job('interval', seconds=10)
-        def reminder_easy():
-            print("Easy")
-        scheduler.start()
-#choices("Hard")
-
-# Ignorer
-'''
-
-'''
-frequency = {1: 5, 2: 2, 3: 3}
-#valg = int(input("Pick 1, 2 or 3: "))
-'''
 
 # Koden starter herfra. 
 
