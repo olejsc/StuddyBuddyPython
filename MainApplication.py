@@ -9,7 +9,7 @@ class FileHandler(tkinter.Frame):
     def __init__(self, root):
         tkinter.Frame.__init__(self, root)
         menubar = Menu(root)
-        Popup = popup()
+        Popup = popup(self,master,subject)
         Clock = clock()
         root.config(menu=menubar)
         # define menubar
