@@ -80,14 +80,17 @@ class FileHandler(tkinter.Frame):
         f.close()
 
 class popup():
-    def __init__(self, master):
+    def __init__(self, master, subject,):
         self.master = master
         master.title("Notification")
 
-        self.label = Label(master, text="Time to read!")
+        self.subject = subject # hvilket fag/tema som skal leses på, må hentes fra det som er lagret i fil
+        self.font=tkinter.font.Font(family='Helvetica', size=26, weight='bold')
+        self.label = Label(master, text="Time to read!" + "\n" + "The subject is: " + subject, font=self.font)
         self.label.pack()
 
-        self.close_button = Button(master, text="Close", command=master.destroy)
+        #self.subjectLabel = Label(master, text="" + subject, font=self.font, color=)
+        self.close_button = Button(master, text="Got it!", command=master.destroy)
         self.close_button.pack()
 
     def real_playsound(self):
@@ -100,11 +103,6 @@ class popup():
         player_thread = Thread(target=self.real_playsound)
         player_thread.start()
 
-'''if __name__=='__main__':
-    root = tkinter.Tk()
-    FileHandler(root).pack(side="top", fill="both", expand=True)
-    menubar = Menu(root)
-    root.mainloop()'''
 
 def main(): 
     root = tkinter.Tk()
