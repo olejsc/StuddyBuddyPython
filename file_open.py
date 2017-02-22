@@ -1,57 +1,85 @@
 import tkinter
 from tkinter import *
-from tkinter.filedialog import askopenfilename, askopenfile, asksaveasfile, asksaveasfilename, askdirectory
-class Example(tkinter.Frame):
+import datetime
+import json
+
+class FileHandler(tkinter.Frame):
     def __init__(self, root):
         tkinter.Frame.__init__(self, root)
-        # options for buttons
-        button_opt = {'fill': 	tkinter.constants.BOTH, 'padx': 5, 'pady': 5}
-
-        # define buttons
-        tkinter.Button(self, text='askopenfile', command=self.askopenfile).pack(**button_opt)
-        tkinter.Button(self, text='askopenfilename', command=self.askopenfilename).pack(**button_opt)
-        tkinter.Button(self, text='asksaveasfile', command=self.asksaveasfile).pack(**button_opt)
-        tkinter.Button(self, text='asksaveasfilename', command=self.asksaveasfilename).pack(**button_opt)
-        tkinter.Button(self, text='askdirectory', command=self.askdirectory).pack(**button_opt)
-        
-        # define options for opening or saving a file
-        self.file_opt = options = {}
-        options['defaultextension'] = '.txt'
-        options['filetypes'] = [('all files', '.*'), ('text files', '.txt')]
-        options['initialdir'] = 'C:\\'
-        options['initialfile'] = 'myfile.txt'
-        options['parent'] = root
-        options['title'] = 'This is a title'
-
-        # This is only available on the Macintosh, and only when Navigation Services are installed.
-        #options['message'] = 'message'
-        # if you use the multiple file version of the module functions this option is set automatically.
-        #options['multiple'] = 1
-        # defining options for opening a directory
-        self.dir_opt = options = {}
-        options['initialdir'] = 'C:\\'
-        options['mustexist'] = False
-        options['parent'] = root
-        options['title'] = 'This is a title'
-
-    def askopenfile(self):
-    # """Returns an opened file in read mode."""
-        return askopenfile(mode='r', **self.file_opt)
-    def askopenfilename(self):
-        filename = filedialog.askopenfilename(**self.file_opt)
-        if filename:
-            return open(filename, 'r')
-    def asksaveasfile(self):
-        """Returns an opened file in write mode."""
-        return filedialog.asksaveasfile(mode='w', **self.file_opt)
-    def asksaveasfilename(self):
-        filename = filedialog.asksaveasfilename(**self.file_opt)
-        if filename:
-            return open(filename, 'w')
-    def askdirectory(self):
-        return filedialog.askdirectory(**self.dir_opt)
+        menubar = Menu(root)
+        root.config(menu=menubar)
+        # define menubar
+        filemenu = Menu(menubar, tearoff=0)
+        filemenu.add_command(label="Exit", command=self.quit_application)
+        menubar.add_cascade(label="File", menu=filemenu)
     
+    def quit_application (self):
+        now = datetime.datetime.now().strftime('%y-%m-%d-%H-%M-%S')
+        with open('log.txt', 'r+') as f:
+            data = f.read()
+            f.seek(0)
+            f.write(now)
+            f.truncate()
+        root.destroy()
+
+    # Retrieves all notifications from the notifications.txt file, and return them as a list.Each notification is written
+    # on one line, and is a dictionary. The returned list have multiple dictionaires (unless there is only one notification)
+    def get_all_notifications():
+        notifications = []
+        with open('notifications.txt',"r") as f:
+            for line in f:
+                notifications.append(json.loads(line))
+        f.close()
+        return notifications
+
+    # Find and identifies a given notification by its given key:value pair in a big list where each notification is a dictionairy.
+    # For example: ('hard topic','Name',list_of_notifications) will search all dictionaries
+    # inside the list for with a key that have that name.
+    def get_notification_by_key_value(target_value,key_value,notifications):
+        print(str(target_value) + " " + str(key_value))
+        for notification in notifications:
+            for key, value in notification.items():
+                if ((str(key) == str(target_value))and ( str(value) == str(key_value))):
+                    return notification
+        
+            
+    # Writes the notification to file, appending it to other, existing notifications (if any).
+    def add_notification_to_file(dictionary_notification):
+        with open('notifications.txt',"a") as f:
+            f.write(json.dumps(dictionary_notification, sort_keys = True))
+            f.write("\n")
+        f.close()
+
+    # Check if given key:value pair exist in a given dictionary, and return true if it does.
+    def check_if_notification_data_exist(target_key,target_value,notification):
+        if notification[target_key] == target_value:
+            return True
+        else:
+            return False
+
+    # TODO: INSERT COMMENT
+    def set_notification_key_value(key, identifying_name, value):
+        notifications = get_all_notifications()
+        target_value = 'Name'
+        target_notification = get_notification_by_key_value(target_value,identifying_name,notifications)
+        old_value = target_notification[key]
+        for notification in notifications:
+            if notification['Name']== identifying_name:
+                notifications.remove(notification)
+                break
+            else:
+                pass
+        notifications.append(target_notification)
+        temp = open('notifications.txt', 'w').close()
+        with open('notifications.txt',"a") as f:
+            for popup in notifications:
+                f.write(json.dumps(popup, sort_keys = True))
+                f.write("\n")
+        f.close()
+
+
 if __name__=='__main__':
     root = tkinter.Tk()
-    Example(root).pack(side="top", fill="both", expand=True)
+    FileHandler(root).pack(side="top", fill="both", expand=True)
+    menubar = Menu(root)
     root.mainloop()
