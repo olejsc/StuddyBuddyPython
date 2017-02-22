@@ -2,6 +2,7 @@
 
 from tkinter import *
 from datetime import *
+<<<<<<< HEAD
 
 '''
 scheduler = BlockingScheduler()
@@ -34,6 +35,8 @@ def choices(txt):
 frequency = {1: 5, 2: 2, 3: 3}
 #valg = int(input("Pick 1, 2 or 3: "))
 '''
+=======
+>>>>>>> 83b7746a4d958b7bfcf5c40d2eb3341b85b0bbad
 
 # Koden starter herfra. 
 
