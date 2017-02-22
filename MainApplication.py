@@ -9,6 +9,8 @@ class FileHandler(tkinter.Frame):
     def __init__(self, root):
         tkinter.Frame.__init__(self, root)
         menubar = Menu(root)
+        Popup = popup()
+        Clock = clock()
         root.config(menu=menubar)
         # define menubar
         filemenu = Menu(menubar, tearoff=0)
@@ -103,12 +105,55 @@ class popup():
         player_thread = Thread(target=self.real_playsound)
         player_thread.start()
 
+class clock():
+    def __init__(self, variable,options):
+        self.variable = IntVar(root)
+        self.variable.set("Frequency")
+        options = {1: 5, 2: 2, 3: 3}
+        OptionMenu(root, variable, *options.keys()).pack()
+
+
+    def shut_down():
+        root.quit()
+
+    button = Button( text="OK", command=shut_down)
+    button.pack()
+
+
+    def time_when_notified(choice):
+        for key, value in options.items():  # Går gjennom elementene i dictionary
+            if key == choice:  # Hvis key er lik valget brukeren velger
+                now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Finner ut tiden nå.
+                solve = datetime.strptime(now, "%Y-%m-%d %H:%M:%S")  # Finner ut og legger til når personen vil bli varslet
+                solve += timedelta(seconds=value)  # -''-
+                notification_time = solve.strftime("%Y-%m-%d %H:%M:%S")  # Variabel for senere bruk
+                return notification_time
+
+
+    #  Sender varsel når nåtid er lik varseltid.
+
+
+    def check_vol2():
+        last_notification = time_when_notified(variable.get())  # Lager variabel med angitt varseltid. Tid i framtiden.
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        datetime_young = datetime.strptime(now, "%Y-%m-%d %H:%M:%S")  # Formatvalg
+        datetime_older = datetime.strptime(last_notification, "%Y-%m-%d %H:%M:%S")  # Formatvalg
+        time_since_last = datetime_older - datetime_young
+        difference = (time_since_last.total_seconds() / 3600)
+        while True:
+            if difference == 0:
+                break
+            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            datetime_young = datetime.strptime(now, "%Y-%m-%d %H:%M:%S")  # Formatvalg
+            time_since_last = datetime_older - datetime_young
+            difference = (time_since_last.total_seconds()/3600)
+        print("Du skal få varsel nå")  # Kjør notifikasjonskode
+
 
 def main(): 
     root = tkinter.Tk()
     menubar = Menu(root)
     FileHandler(root).pack(side="top", fill="both", expand=True)
-    Popup = popup(root)
     root.mainloop()
 
 if __name__ == '__main__':

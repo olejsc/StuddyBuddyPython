@@ -2,7 +2,6 @@
 
 from tkinter import *
 from datetime import *
-from apscheduler.schedulers.blocking import BlockingScheduler
 
 '''
 scheduler = BlockingScheduler()
