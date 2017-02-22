@@ -4,6 +4,7 @@ from tkinter import *
 from datetime import *
 from apscheduler.schedulers.blocking import BlockingScheduler
 
+'''
 scheduler = BlockingScheduler()
 
 #  Ignorer
@@ -28,11 +29,14 @@ def choices(txt):
 #choices("Hard")
 
 # Ignorer
+'''
 
 '''
 frequency = {1: 5, 2: 2, 3: 3}
 #valg = int(input("Pick 1, 2 or 3: "))
 '''
+
+# Koden starter herfra. 
 
 master = Tk()
 variable = IntVar(master)
