@@ -3,11 +3,33 @@ from tkinter import *
 from threading import Thread
 import pyglet
 import datetime
+import time
 import json
 
-'''def __init__(self,*args,**kwargs):
-    container =  tk.Frame(self)
-'''
+# ----------------------------------------------------
+# GLOBALE VARIABLER
+# ----------------------------------------------------
+
+
+LARGE_FONT= ("Verdana", 12)
+name_dict = {"SubjectCode": "", "Freqency": "", "Name" : "", "FrequencyLength" : "", 'LastNotification': "", "LastNotificationSeen": "False"}
+notifications = get_all_notifications()
+options = {1: 5, 2: 2, 3: 3}
+
+
+# ----------------------------------------------------
+# Fungerende, men ikke nødvendigvis i bruk av programmet-kode:
+# ----------------------------------------------------
+
+def callback(e):
+    input_string = str(e.get())
+    now = datetime.datetime.now().strftime('%y-%m-%d-%H-%M-%S')
+    name_dict["Name"] = input_string
+    name_dict["Registered"]= now
+    if get_notification_by_key_value('Name',input_string,notifications) == False:
+        add_notification_to_file(name_dict)
+    e.delete(0, END) #Denne linjen sletter skriven etter ADD-knappen trykkes
+    
 def quit_application (self):
     now = datetime.datetime.now().strftime('%y-%m-%d-%H-%M-%S')
     with open('log.txt', 'r+') as f:
@@ -15,7 +37,7 @@ def quit_application (self):
         f.seek(0)
         f.write(now)
         f.truncate()
-    root.destroy()
+    self.destroy()
 
 # Retrieves all notifications from the notifications.txt file, and return them as a list.Each notification is written
 # on one line, and is a dictionary. The returned list have multiple dictionaires (unless there is only one notification)
@@ -36,8 +58,10 @@ def get_notification_by_key_value(target_value,key_value,notifications):
         for key, value in notification.items():
             if ((str(key) == str(target_value))and ( str(value) == str(key_value))):
                 return notification
-    
-        
+            else:
+                pass
+    return False
+
 # Writes the notification to file, appending it to other, existing notifications (if any).
 def add_notification_to_file(dictionary_notification):
     with open('notifications.txt',"a") as f:
@@ -72,6 +96,53 @@ def set_notification_key_value(key, identifying_name, value):
             f.write("\n")
     f.close()
 
+# ----------------------------------------------------
+# ----------------------------------------------------
+
+
+
+'''
+def get_time_of_notification(notifications):
+    opts = { Opt1: {'Time':{notification1},'Time2':{notification2}},Opt2:{'Time1':{Not1},'Time2':{not2}},Opt3:{'Time1':{Not1},'Time2':{not2}}}
+    for notification in notifications:
+        
+        registered = notification['Registered']
+        if notification['LastNotificationSeen'] == 'True' and notification['LastNotification'] != "":
+            # Calculates next popup, Nåtid minus LastNotification
+            # return a dict with { time_to_popup : {notification}
+             popup_return_time_dict = calculate_when_next_popup_will_be(notification,options,1)
+             insert_popup_into_correct_dict_position_in_opts
+
+             
+        elif notification['LastNotificationSeen'] == 'False' and notification['LastNotification'] != "":
+            # Calculates next popup, Now minus LastNotification
+            # If the time is there to show popup, return true or something :p If not, return a dict with { time_to_popup : {notification}} 
+            if calculate_when_next_popup will be(notification,options,2) == True:
+                 show_popup(notification)
+                 
+            # If not, return a dict with { time_to_popup : {notification}} 
+            else:
+                dict_with_calculated_time = calculate_when_next_popup will be(notification,options,2)
+
+                
+        elif notification['LastNotification'] == "":
+            # Calculates next popup, Now minus Registered
+            # return a dict with { time_to_popup : {notification}} 
+            calculate_when_next_popup will be(notification,options,)
+            insert_popup_into_correct_dict_position_in_opts
+'''
+            
+def popupmsg(notification, ):
+    popup = tk.Tk()
+    popup.wm_title("!")
+    label = tk.Label(popup, text=msg, font=LARGE_FONT)
+    label.pack(side="top", fill="x", pady=10)
+    B1 = ttk.Button(popup, text="Okay", command = popup.destroy)
+    B1.pack()
+    popup.mainloop()
+        
+
+
 
 '''def __init__(self, master, subject,):
     self.master = master
@@ -98,23 +169,14 @@ def playsound(self):
     player_thread.start()
 
 
-def __init__(self, variable,options):
-    self.variable = IntVar(root)
-    self.variable.set("Frequency")
-    options = {1: 5, 2: 2, 3: 3}
-    OptionMenu(root, variable, *options.keys()).pack()
 
 
 def shut_down(self):
-    root.quit()
-
-button = Button( text="OK", command=shut_down)
-button.pack()
+    self.quit()
 
 
-def time_when_notified(self,choice):
-    for key, value in options.items():  # Går gjennom elementene i dictionary
-        if key == choice:  # Hvis key er lik valget brukeren velger
+def time_when_notified(notification,options,requested_logic):
+    for key, value in notification.items():  # Går gjennom elementene i dictionary
             now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Finner ut tiden nå.
             solve = datetime.strptime(now, "%Y-%m-%d %H:%M:%S")  # Finner ut og legger til når personen vil bli varslet
             solve += timedelta(seconds=value)  # -''-
@@ -141,6 +203,13 @@ def check_vol2(self):
         difference = (time_since_last.total_seconds()/3600)
     print("Du skal få varsel nå")  # Kjør notifikasjonskode
 
+
+# ----------------------------------------------------
+# ----------------------------------------------------
+# FUNGERENDE PROGRAM UNDER:
+# ----------------------------------------------------
+# ----------------------------------------------------
+
 class MainApplication(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -150,6 +219,13 @@ class MainApplication(tk.Tk):
 
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
+        
+        menubar = tk.Menu(container)
+        filemenu = tk.Menu(menubar, tearoff=0)
+        filemenu.add_command(label="Exit", command=lambda: quit_application(self))
+        menubar.add_cascade(label="File", menu=filemenu)
+
+        tk.Tk.config(self, menu=menubar)
 
         self.frames = {}
 
@@ -158,26 +234,42 @@ class MainApplication(tk.Tk):
         self.frames[Add_notification] = frame
 
         frame.grid(row=0, column=0, sticky="nsew")
+        self.root = tk.Tk()
+        self.label = tk.Label(text="")
+        self.label.pack()
 
         self.show_frame(Add_notification)
+        self.update_clock()
+
+    def update_clock(self):
+        now = time.strftime("%H:%M:%S")
+        self.label.configure(text=now)
+        self.root.after(1000, self.update_clock)
 
     def show_frame(self, cont):
 
         frame = self.frames[cont]
         frame.tkraise()
 
+
+
+# ----------------------------------------------------
+# GLOBALE VARIABLER
+# ----------------------------------------------------
+
+
 LARGE_FONT= ("Verdana", 12)
 name_dict = {"SubjectCode": "", "Freqency": "", "Name" : "", "FrequencyLength" : "", 'LastNotification': "", "LastNotificationSeen": "False"}
+notifications = get_all_notifications()
+options = {1: 5, 2: 2, 3: 3}
+
 
 class Add_notification(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self,parent)
-
         #Dette er Meldingen som vises
-        var = StringVar()
-        message = Message(self, textvariable =var, width=200, pady = 10, padx = 5, font = "Arial", bd = 0, bg="WHITE")
-        var.set("Add something:")
-        message.pack()
+        label = tk.Label(self, text=("""Add Serious hard subjects to learn here"""), font=LARGE_FONT, bg = "WHITE")
+        label.pack(pady=10,padx=10)
 
         #Dette er feltet vi skriver inn i:
         e = Entry(self)
@@ -193,13 +285,6 @@ class Add_notification(tk.Frame):
         #separator.pack(fill=X, padx=5, pady=5)
 
 
-
-def callback(e):
-    print(e.get())
-    input_string = str(e.get())
-    name_dict["Name"] = input_string
-    add_notification_to_file(name_dict)
-    e.delete(0, END) #Denne linjen sletter skriven etter ADD-knappen trykkes
 
 def main(): 
     app = MainApplication()
