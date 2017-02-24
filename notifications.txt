@@ -1,7 +1,7 @@
-{"FrequenceLength": "2", "Frequency": "3", "LastNotificaitonSeen": "False", "LastNotification": "07.02.2017 13:43:45", "Name": "hard topic", "Registered": "03.02.2017 20:42:19", "SubjectCode": "TDT4100"}
-{"FrequenceLength": "2", "Frequency": "3", "LastNotification": "07.02.2017 13:43:45", "LastNotificationSeen": "True", "Name": "test343", "Registered": "03.02.2017 20:42:19", "SubjectCode": "TDT4100"}
-{"FrequenceLength": "2", "Frequency": "3", "LastNotification": "07.02.2017 13:43:45", "LastNotificationSeen": "True", "Name": "advanced_test", "Registered": "03.02.2017 20:42:19", "SubjectCode": "TDT4100"}
-{"Freqency": "", "FrequencyLength": "", "LastNotification": "", "LastNotificationSeen": "False", "Name": "asdge", "Registered": "17-02-23-10-04-09", "SubjectCode": ""}
-{"Freqency": "", "FrequencyLength": "", "LastNotification": "", "LastNotificationSeen": "False", "Name": "asda", "Registered": "17-02-23-13-37-38", "SubjectCode": ""}
-{"Freqency": "", "FrequencyLength": "", "LastNotification": "", "LastNotificationSeen": "False", "Name": "hei!", "Registered": "17-02-23-13-43-25", "SubjectCode": ""}
-{"Freqency": "", "FrequencyLength": "", "LastNotification": "", "LastNotificationSeen": "False", "Name": "fdfhgr", "Registered": "17-02-23-13-43-31", "SubjectCode": ""}
+{"Frequency": "604800000", "FrequencyLength": "1", "LastNotification": "17-02-24-15-05-46", "LastNotificationSeen": "True", "Name": "asda", "Registered": "17-02-09-13-37-38", "SubjectCode": ""}
+{"FrequenceLength": "3", "Frequency": "604800000000", "LastNotification": "17-02-24-15-05-46", "LastNotificationSeen": "True", "Name": "test343", "Registered": "17-02-23-13-37-38", "SubjectCode": "TDT4100"}
+{"Frequency": "604800000000", "FrequencyLength": "4", "LastNotification": "17-02-24-15-05-46", "LastNotificationSeen": "True", "Name": "fdfhgr", "Registered": "17-02-23-13-43-31", "SubjectCode": ""}
+{"FrequenceLength": "1", "Frequency": "604800000000", "LastNotification": "17-02-24-15-05-46", "LastNotificationSeen": "False", "Name": "advanced_test", "Registered": "17-02-23-13-37-38", "SubjectCode": "TDT4100"}
+{"FrequenceLength": "2", "Frequency": "604800000000", "LastNotification": "17-02-24-15-05-46", "LastNotificationSeen": "True", "Name": "hard topic", "Registered": "17-02-23-13-37-38", "SubjectCode": "TDT4100"}
+{"Frequency": "60000", "FrequencyLength": "3", "LastNotification": "17-02-24-15-24-19", "LastNotificationSeen": "True", "Name": "asdge", "Registered": "17-02-23-10-04-09", "SubjectCode": ""}
+{"Frequency": "680", "FrequencyLength": "2", "LastNotification": "17-02-24-15-24-19", "LastNotificationSeen": "True", "Name": "hei!", "Registered": "17-02-16-13-43-25", "SubjectCode": ""}
