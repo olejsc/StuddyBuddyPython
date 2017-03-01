@@ -205,7 +205,9 @@ class MainApplication(tk.Tk):
                 for key3, value3 in value.items():
                     if value3['LastNotificationSeen'] == 'True':
                         noti = 'delayed'
-                        self.after(key_ms,topLevel(key3,value3,noti))
+                        key_3 = int(key3 *(-1))
+                        print("hei!" + str(key_3))
+                        self.after(key_3,topLevel(key3,value3,noti))
                         notification_window = True
                         key_later = 'LastNotification'
                         now3 = datetime.now().strftime('%y-%m-%d-%H-%M-%S')
