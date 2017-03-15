@@ -1,6 +1,6 @@
-{"Frequency": 1209600000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "False", "Name": "Testnot", "Registered": "17-03-13-14-32-54", "SubjectCode": "TDT4160"}
-{"Frequency": 1209600000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "False", "Name": "testnoti", "Registered": "17-03-13-14-33-23", "SubjectCode": "TDT4160"}
-{"Frequency": 604800000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "False", "Name": "hei!!!!", "Registered": "17-03-15-12-39-59", "SubjectCode": "TDT4160"}
+{"Frequency": 1209600000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "Testnot", "Registered": "17-03-13-14-32-54", "SubjectCode": "TDT4160"}
+{"Frequency": 1209600000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "testnoti", "Registered": "17-03-13-14-33-23", "SubjectCode": "TDT4160"}
+{"Frequency": 604800000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "False", "Name": "hei!!!!", "Registered": "17-03-06-12-39-59", "SubjectCode": "TDT4160"}
 {"Frequency": "10003", "FrequencyLength": "1", "LastNotification": "17-03-15-12-43-44", "LastNotificationSeen": "True", "Name": "Python - For & while l\u00f8kker", "Registered": "17-02-23-13-37-38", "SubjectCode": "TDT4110"}
 {"Frequency": "10002", "FrequencyLength": "2", "LastNotification": "17-03-15-12-43-44", "LastNotificationSeen": "True", "Name": "Insertion Sort og andre grunnleggende algoritmer", "Registered": "17-02-23-13-37-38", "SubjectCode": "TDT4120"}
 {"Frequency": "90000", "FrequencyLength": "2", "LastNotification": "17-03-15-12-43-44", "LastNotificationSeen": "True", "Name": "Test", "Registered": "17-02-27-09-14-58", "SubjectCode": "TDT2301"}

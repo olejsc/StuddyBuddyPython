@@ -8,6 +8,7 @@
 import threading
 import sys
 import time
+from time import sleep
 from threading import Thread
 import pyglet
 import datetime
@@ -68,7 +69,6 @@ class Ui_MainWindow(object):
         
         self.notifications = self.get_all_notifications()
         opts = self.get_time_of_notification(self.notifications)
-        print(type(self.notifications))
         # MainWindow style and initialization
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(500, 500)
@@ -91,14 +91,14 @@ class Ui_MainWindow(object):
         self.groupBox = QtWidgets.QGroupBox(self.verticalLayoutWidget)
         self.groupBox.setObjectName("groupBox")
         self.radioButton = QtWidgets.QRadioButton(self.groupBox)
-        self.radioButton.setGeometry(QtCore.QRect(10, 20, 289, 17))
+        self.radioButton.setGeometry(QtCore.QRect(10, 20, 300, 20))
         self.radioButton.setObjectName("radioButton")
         self.radioButton.setChecked(True)
         self.radioButton_2 = QtWidgets.QRadioButton(self.groupBox)
-        self.radioButton_2.setGeometry(QtCore.QRect(10, 40, 289, 17))
+        self.radioButton_2.setGeometry(QtCore.QRect(10, 40, 300, 20))
         self.radioButton_2.setObjectName("radioButton_2")
         self.radioButton_3 = QtWidgets.QRadioButton(self.groupBox)
-        self.radioButton_3.setGeometry(QtCore.QRect(10, 60, 82, 17))
+        self.radioButton_3.setGeometry(QtCore.QRect(10, 60, 300, 20))
         self.radioButton_3.setObjectName("radioButton_3")
         self.verticalLayout.addWidget(self.groupBox)
 
@@ -181,17 +181,19 @@ class Ui_MainWindow(object):
                     notification_window = True
                     key_now = 'LastNotification'
                     self.trigger_popup(value2)
-                    # self.set_notification_key_value(key_now, value2['Name'], now2,notifications)
-                    print('Showing norma popups now...')
+                    #self.set_notification_key_value(key_now, value2['Name'], now2,self.notifications)
+                    print('Showing normal popup now...')
             elif key == 'show_later':
+                print("Done with normal popups now")
                 for key3, value3 in value.items():
                     if value3['LastNotificationSeen'] == 'True':
                         key_later = 'LastNotification'
-                        print("Showing timed popups now..")
                         now3 = datetime.now().strftime('%y-%m-%d-%H-%M-%S')
-                        self.startTimedPopup(key3,value3)
-                        print("asdasdasda")
-                        self.set_notification_key_value(key_later, value3['Name'], now3,self.notifications)
+                        key4 = 1000
+                        thread = threading.Thread(target=Ui_MainWindow.popupTimer(self,key3,value3))
+                        thread.start()
+                        print("Thread started")
+                        # self.set_notification_key_value(key_later, value3['Name'], now3,self.notifications)
                     else:
                         pass
                         
@@ -231,7 +233,6 @@ class Ui_MainWindow(object):
                 f.seek(0)
                 f.write(now)
                 f.truncate()
-            print('quit application')
             sys.exit()
         else:
             pass
@@ -270,17 +271,17 @@ class Ui_MainWindow(object):
             self.label_2.setText("You need to enter something in the name field!")
             pass
 
-    def startTimedPopup(self,key3,value3):
-        thread = threading.Thread(target=Ui_MainWindow.popupTimer(self,key3,value3))
-        thread.start()
-        print("Thread started")
+
 
     def popupTimer(self,key,value):
-        for x in range(0,key,1000):
-            time.sleep(int(key)/1000)
-            print("Deploing popup in" +str(x)+" seconds")
-            if x >= key3:
-                self.trigger_popup(value3)
+        print("Popup will be deployed in:" + str(int(key/1000))+"...seconds")
+        for x in range(key,0,-1000):
+            sleep(1)
+            print("Deploying popup in" +str(x/1000)+" seconds")
+            if x <= 0:
+                print("Showing delayed popup now!")
+                Ui_MainWindow.trigger_popup(self,value)
+        
                 
 
     def trigger_popup(self,value):
@@ -291,7 +292,6 @@ class Ui_MainWindow(object):
         if (choice == QMessageBox.Yes ):
             now = datetime.now().strftime('%y-%m-%d-%H-%M-%S')
             self.quit_and_store(choice,value['Name'], "True")
-            print('quit application')
             pass
         else:
             pass
