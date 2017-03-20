@@ -1,11 +1,9 @@
 {"Frequency": 1209600000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "Testnot", "Registered": "17-03-13-14-32-54", "SubjectCode": "TDT4160"}
-{"Frequency": 1209600000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "testnoti", "Registered": "17-03-13-14-33-23", "SubjectCode": "TDT4160"}
-{"Frequency": 604800000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "False", "Name": "hei!!!!", "Registered": "17-03-06-12-39-59", "SubjectCode": "TDT4160"}
-{"Frequency": "10003", "FrequencyLength": "1", "LastNotification": "17-03-15-12-43-44", "LastNotificationSeen": "True", "Name": "Python - For & while l\u00f8kker", "Registered": "17-02-23-13-37-38", "SubjectCode": "TDT4110"}
-{"Frequency": "10002", "FrequencyLength": "2", "LastNotification": "17-03-15-12-43-44", "LastNotificationSeen": "True", "Name": "Insertion Sort og andre grunnleggende algoritmer", "Registered": "17-02-23-13-37-38", "SubjectCode": "TDT4120"}
-{"Frequency": "90000", "FrequencyLength": "2", "LastNotification": "17-03-15-12-43-44", "LastNotificationSeen": "True", "Name": "Test", "Registered": "17-02-27-09-14-58", "SubjectCode": "TDT2301"}
-{"Frequency": 1209600000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "False", "Name": "testtest32", "Registered": "17-03-15-13-52-27", "SubjectCode": "TDT4160"}
-{"Frequency": "10001", "FrequencyLength": "3", "LastNotification": "17-03-15-12-43-44", "LastNotificationSeen": "True", "Name": "Demonstrasjon i PU", "Registered": "17-02-23-13-37-38", "SubjectCode": "TDT4140"}
+{"Frequency": 616890230, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "testnoti", "Registered": "17-03-13-14-33-23", "SubjectCode": "TDT4160"}
+{"Frequency": 1709608300, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "testtest32", "Registered": "17-03-15-13-52-27", "SubjectCode": "TDT4160"}
+{"Frequency": 604878000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "False", "Name": "test2", "Registered": "17-03-15-13-56-04", "SubjectCode": "TDT4160"}
+{"Frequency": 604842000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "False", "Name": "\u00c6ddab\u00e6dda", "Registered": "17-03-15-15-51-35", "SubjectCode": "TDT4160"}
+{"Frequency": 604812000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "False", "Name": "asd", "Registered": "17-03-15-17-51-55", "SubjectCode": "TDT4160"}
 {"Frequency": "100041", "FrequencyLength": "3", "LastNotification": "17-03-15-12-43-44", "LastNotificationSeen": "True", "Name": "GUI-elementer og deres relasjoner", "Registered": "17-02-23-13-43-31", "SubjectCode": "TDT4180"}
-{"Frequency": 604800000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "False", "Name": "test2", "Registered": "17-03-15-13-56-04", "SubjectCode": "TDT4160"}
-{"Frequency": "10005", "FrequencyLength": "1", "LastNotification": "17-03-15-12-43-44", "LastNotificationSeen": "True", "Name": "Derivasjon, HUSK OG LESE P\u00c5!", "Registered": "17-02-09-13-37-38", "SubjectCode": "MA0301"}
+{"Frequency": 604800000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "hei!!!!", "Registered": "17-03-06-12-39-59", "SubjectCode": "TDT4160"}
+{"Frequency": "90000", "FrequencyLength": "2", "LastNotification": "17-03-15-12-43-44", "LastNotificationSeen": "True", "Name": "Test", "Registered": "17-02-27-09-14-58", "SubjectCode": "TDT2301"}

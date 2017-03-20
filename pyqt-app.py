@@ -5,11 +5,11 @@
 # Created by: PyQt5 UI code generator 5.8.1
 #
 # WARNING! All changes made in this file will be lost!
-import threading
 import sys
 import time
 from time import sleep
 from threading import Thread
+import threading
 import pyglet
 import datetime
 from datetime import *
@@ -83,7 +83,7 @@ class Ui_MainWindow(object):
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(70, 10, 371, 371))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setContentsMargins(0,0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
 
         # Creates a groupbox with 3 radio buttons and assign
@@ -91,14 +91,14 @@ class Ui_MainWindow(object):
         self.groupBox = QtWidgets.QGroupBox(self.verticalLayoutWidget)
         self.groupBox.setObjectName("groupBox")
         self.radioButton = QtWidgets.QRadioButton(self.groupBox)
-        self.radioButton.setGeometry(QtCore.QRect(10, 20, 300, 20))
+        self.radioButton.setGeometry(QtCore.QRect(10, 40, 289, 17))
         self.radioButton.setObjectName("radioButton")
         self.radioButton.setChecked(True)
         self.radioButton_2 = QtWidgets.QRadioButton(self.groupBox)
-        self.radioButton_2.setGeometry(QtCore.QRect(10, 40, 300, 20))
+        self.radioButton_2.setGeometry(QtCore.QRect(10,60, 289,17))
         self.radioButton_2.setObjectName("radioButton_2")
         self.radioButton_3 = QtWidgets.QRadioButton(self.groupBox)
-        self.radioButton_3.setGeometry(QtCore.QRect(10, 60, 300, 20))
+        self.radioButton_3.setGeometry(QtCore.QRect(10, 80, 289, 17))
         self.radioButton_3.setObjectName("radioButton_3")
         self.verticalLayout.addWidget(self.groupBox)
 
@@ -116,7 +116,7 @@ class Ui_MainWindow(object):
         # self.lineEdit.setInputMask("ABCDEFGH")
         # self.lineEdit.setMaxLength (140)
         # reg_exp_input  = QRegExp()
-        # reg_exp_input.setPattern('[^'"]")
+        # reg_exp_input.setPattern("[^'"]")
         # input_validator = QRegExpValidator(reg_exp_input, self.lineEdit)
         # self.lineEdit.setValidator(input_validator)
 
@@ -171,9 +171,14 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuRexx.menuAction())
         self.actionAvslutt.triggered.connect(self.close_application)
         self.menuRexx.addAction(self.actionAvslutt)
-
+        self.actionTest = QtWidgets.QAction(MainWindow)
+        self.actionTest.setObjectName("actionTest")
+        self.menuRexx.addAction(self.actionTest)
+        MainWindow.show()
+        
 
         # Popup-logic
+        self.mylist = []
         for key, value in opts.items():
             if key == 'show_now':
                 for key2, value2 in value.items():
@@ -190,13 +195,12 @@ class Ui_MainWindow(object):
                         key_later = 'LastNotification'
                         now3 = datetime.now().strftime('%y-%m-%d-%H-%M-%S')
                         key4 = 1000
-                        thread = threading.Thread(target=Ui_MainWindow.popupTimer(self,key3,value3))
+                        thread = threading.Thread(target=Ui_MainWindow.popupTimer, args = (self,key3,value3))
                         thread.start()
-                        print("Thread started")
                         # self.set_notification_key_value(key_later, value3['Name'], now3,self.notifications)
                     else:
                         pass
-                        
+        
 
 
         # Dont ask. 
@@ -223,10 +227,10 @@ class Ui_MainWindow(object):
 
     # Closes the appliation. Called by the exit button in top left corner. 
     def close_application(self):
-        self.choice = QMessageBox.question(QtWidgets.QWidget(MainWindow), 'Warning',
+        choice = QMessageBox.question(QtWidgets.QWidget(MainWindow), 'Warning',
                                      "Are you sure to quit?", QMessageBox.Yes |
                                      QMessageBox.No, QMessageBox.No)
-        if self.choice == QMessageBox.Yes:
+        if choice == QMessageBox.Yes:
             now = datetime.now().strftime('%y-%m-%d-%H-%M-%S')
             with open('log.txt', 'r+') as f:
                 data = f.read()
@@ -241,7 +245,12 @@ class Ui_MainWindow(object):
     def callback_input(self):
         if self.lineEdit.isModified():
             frequency = 0
-            name = self.lineEdit.text()
+            name = str(self.lineEdit.text())
+            if ("'"  or '"' in name) :
+                self.label_2.setText("Single and double quotes are not allowed in the name")
+                self.lineEdit.clear()
+                self.lineEdit.setModified(False)
+                return
             self.notifications = self.get_all_notifications()
             if self.get_notification_by_key_value('Name',name,self.notifications) == False:
                 if self.radioButton.isChecked():
@@ -263,9 +272,14 @@ class Ui_MainWindow(object):
                 self.lineEdit.clear()
                 self.lineEdit.setModified(False)
             else:
-                self.label_2.setText("That name for a topic is allready taken")
-                self.lineEdit.clear()
-                self.lineEdit.setModified(False)
+                if "'" in name or '"' in name :
+                    self.label_2.setText("Single and double quotes are not allowed in the name")
+                    self.lineEdit.clear()
+                    self.lineEdit.setModified(False)
+                else:
+                    self.label_2.setText("That name for a topic is allready taken")
+                    self.lineEdit.clear()
+                    self.lineEdit.setModified(False)
             
         else:
             self.label_2.setText("You need to enter something in the name field!")
@@ -274,10 +288,11 @@ class Ui_MainWindow(object):
 
 
     def popupTimer(self,key,value):
-        print("Popup will be deployed in:" + str(int(key/1000))+"...seconds")
-        for x in range(key,0,-1000):
+        print("Popup will be deployed in: " + str(int(key/1000))+"...seconds"+"\n")
+        for x in range(key,-1,-1000):
             sleep(1)
-            print("Deploying popup in" +str(x/1000)+" seconds")
+            print("Deploying popup in" +str(x/1000)+" seconds ." +"\n")
+            print("This applies to: "+ str(value["Name"]))
             if x <= 0:
                 print("Showing delayed popup now!")
                 Ui_MainWindow.trigger_popup(self,value)
@@ -291,14 +306,14 @@ class Ui_MainWindow(object):
                                       QMessageBox.No, QMessageBox.No)
         if (choice == QMessageBox.Yes ):
             now = datetime.now().strftime('%y-%m-%d-%H-%M-%S')
-            self.quit_and_store(choice,value['Name'], "True")
+            self.quit_and_store(value['Name'], "True")
             pass
         else:
             pass
         
-    def quit_and_store(self, choice, identifying_name, value):
+    def quit_and_store(self, identifying_name, value):
         key = 'LastNotificationSeen'
-        Ui_MainWindow.set_notification_key_value(self,key, identifying_name, value)
+        self.set_notification_key_value(key, identifying_name, value)
 
     # Retrieves all notifications from the notifications.txt file, and return them as a list.Each notification is written
     # on one line, and is a dictionary. The returned list have multiple dictionaires (unless there is only one notification)
@@ -443,7 +458,7 @@ class Ui_MainWindow(object):
 
 class Popupthread(QtCore.QThread):
 
-    def __init__(self):
+    def __init__(self,):
         QThread.__init__(self)
         
 
