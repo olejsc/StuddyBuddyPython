@@ -1,9 +1,9 @@
-{"Frequency": 1209600000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "Testnot", "Registered": "17-03-13-14-32-54", "SubjectCode": "TDT4160"}
-{"Frequency": 616890230, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "testnoti", "Registered": "17-03-13-14-33-23", "SubjectCode": "TDT4160"}
-{"Frequency": 1709608300, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "testtest32", "Registered": "17-03-15-13-52-27", "SubjectCode": "TDT4160"}
-{"Frequency": 604878000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "False", "Name": "test2", "Registered": "17-03-15-13-56-04", "SubjectCode": "TDT4160"}
-{"Frequency": 604842000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "False", "Name": "\u00c6ddab\u00e6dda", "Registered": "17-03-15-15-51-35", "SubjectCode": "TDT4160"}
-{"Frequency": 604812000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "False", "Name": "asd", "Registered": "17-03-15-17-51-55", "SubjectCode": "TDT4160"}
-{"Frequency": "100041", "FrequencyLength": "3", "LastNotification": "17-03-15-12-43-44", "LastNotificationSeen": "True", "Name": "GUI-elementer og deres relasjoner", "Registered": "17-02-23-13-43-31", "SubjectCode": "TDT4180"}
-{"Frequency": 604800000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "hei!!!!", "Registered": "17-03-06-12-39-59", "SubjectCode": "TDT4160"}
-{"Frequency": "90000", "FrequencyLength": "2", "LastNotification": "17-03-15-12-43-44", "LastNotificationSeen": "True", "Name": "Test", "Registered": "17-02-27-09-14-58", "SubjectCode": "TDT2301"}
+{"Frequency": 1709308300, "FrequencyLength": "2", "LastNotification": "17-03-15-12-43-39", "LastNotificationSeen": "True", "Name": "Kapittel 7 i Hansen boken", "Registered": "17-03-15-13-52-27", "SubjectCode": "TDT4160"}
+{"Frequency": 1209600000, "FrequencyLength": "2", "LastNotification": "17-03-15-12-43-44", "LastNotificationSeen": "True", "Name": "NP-Komplett problemer, kap 14 i pensum", "Registered": "17-03-13-14-32-54", "SubjectCode": "TDT4160"}
+{"Frequency": "90000", "FrequencyLength": "2", "LastNotification": "17-03-24-12-20-34", "LastNotificationSeen": "True", "Name": "Diskret Matematikk - Kap 8: Grafer", "Registered": "17-02-27-09-14-58", "SubjectCode": "TDT2301"}
+{"Frequency": 604878000, "FrequencyLength": "2", "LastNotification": "17-03-24-12-20-36", "LastNotificationSeen": "True", "Name": "Platon og hans utopi", "Registered": "17-03-15-13-56-04", "SubjectCode": "TDT4180"}
+{"Frequency": 619890230, "FrequencyLength": "2", "LastNotification": "17-03-24-12-20-37", "LastNotificationSeen": "True", "Name": "Intel 32x prossoren, kap 4", "Registered": "17-03-13-14-33-23", "SubjectCode": "TDT4125"}
+{"Frequency": 604842000, "FrequencyLength": "2", "LastNotification": "17-03-24-12-20-37", "LastNotificationSeen": "True", "Name": "klasser og subklasser, ", "Registered": "17-03-15-15-51-35", "SubjectCode": "TDT4100"}
+{"Frequency": 604800000, "FrequencyLength": "2", "LastNotification": "17-03-24-12-20-38", "LastNotificationSeen": "True", "Name": "Pearsons R og korrelasjon", "Registered": "17-03-06-12-39-59", "SubjectCode": "TDT4190"}
+{"Frequency": 604812000, "FrequencyLength": "2", "LastNotification": "17-03-16-12-20-38", "LastNotificationSeen": "True", "Name": "Politikk og \u00f8konomi, komune\u00f8konomi - kap. 8", "Registered": "17-03-15-17-51-55", "SubjectCode": "TDT4160"}
+{"Frequency": "100041", "FrequencyLength": "3", "LastNotification": "17-03-24-12-20-38", "LastNotificationSeen": "True", "Name": "GUI-elementer og deres relasjoner", "Registered": "17-02-23-13-43-31", "SubjectCode": "TDT4180"}

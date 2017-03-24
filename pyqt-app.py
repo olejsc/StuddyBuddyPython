@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'basic.ui'
-#
-# Created by: PyQt5 UI code generator 5.8.1
-#
-# WARNING! All changes made in this file will be lost!
 import sys
 import time
 from time import sleep
@@ -16,8 +9,9 @@ from datetime import *
 import json
 import PyQt5
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox
+from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox,QSystemTrayIcon,QMenu, QAction,QStyle, QVBoxLayout, QPushButton, QLabel, qApp)
 from PyQt5.QtCore import *
+from PyQt5.QtGui import QIcon
 from PyQt5.QtGui import QRegExpValidator
 
 
@@ -27,7 +21,7 @@ from PyQt5.QtGui import QRegExpValidator
 
 notification_window = False
 name_dict = {"SubjectCode": "", "Frequency": "", "Name" : "", "FrequencyLength" : "", 'LastNotification': "", "LastNotificationSeen": "False"}
-                
+
 '''
 if notification_window == True:
     playsound(self)'''
@@ -61,29 +55,47 @@ def playsound(self):
 #   Menubar
 #       MenuRexx
 #           ActionAvslutt
-
+#           ActionTest
 
 
 class Ui_MainWindow(object):
+
     def setupUi(self, MainWindow):
-        
+
+        self.tray_icon = QSystemTrayIcon()
+        self.tray_icon.setIcon(QIcon("schedule.ico"))
+
+        self.tray_icon.show_action = QAction("Show", MainWindow)
+        self.tray_icon.quit_action = QAction("Exit", MainWindow)
+        self.tray_icon.hide_action = QAction("Hide", MainWindow)
+        self.tray_icon.show_action.triggered.connect(MainWindow.show)
+        self.tray_icon.hide_action.triggered.connect(MainWindow.hide)
+        self.tray_icon.quit_action.triggered.connect(sys.exit)
+        self.tray_icon.tray_menu = QMenu()
+        self.tray_icon.tray_menu.addAction(self.tray_icon.show_action)
+        self.tray_icon.tray_menu.addAction(self.tray_icon.hide_action)
+        self.tray_icon.tray_menu.addAction(self.tray_icon.quit_action)
+        self.tray_icon.setContextMenu(self.tray_icon.tray_menu)
+        self.tray_icon.show()
+
+
         self.notifications = self.get_all_notifications()
         opts = self.get_time_of_notification(self.notifications)
         # MainWindow style and initialization
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(500, 500)
-        
+
         # CentralWidge initialization
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        
+
         # Initial layouts. VerticalLayoutWidget is inside centralvidget, and
         # VerticalLaout is inside verticalLayoutsWidget
         self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(70, 10, 371, 371))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setContentsMargins(0,0, 0, 0)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
 
         # Creates a groupbox with 3 radio buttons and assign
@@ -112,17 +124,9 @@ class Ui_MainWindow(object):
         self.lineEdit.setObjectName("lineEdit")
         self.verticalLayout.addWidget(self.lineEdit)
 
-        # Validation of lineEdit:
-        # self.lineEdit.setInputMask("ABCDEFGH")
-        # self.lineEdit.setMaxLength (140)
-        # reg_exp_input  = QRegExp()
-        # reg_exp_input.setPattern("[^'"]")
-        # input_validator = QRegExpValidator(reg_exp_input, self.lineEdit)
-        # self.lineEdit.setValidator(input_validator)
 
 
-        
-        
+
         # Empty label, meant to be "invisble", but if invalid input
         # is entered, it shows up with the error msg
         self.label_2 = QtWidgets.QLabel(self.verticalLayoutWidget)
@@ -149,18 +153,18 @@ class Ui_MainWindow(object):
         self.lineEdit.raise_()
         self.label_2.raise_()
 
-        # Sets centralwidget as centralwidget of the window... 
+        # Sets centralwidget as centralwidget of the window...
         MainWindow.setCentralWidget(self.centralwidget)
 
         # Creates menubar
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 499, 21))
         self.menubar.setObjectName("menubar")
-        
-        # create menu Rexx 
+
+        # create menu Rexx
         self.menuRexx = QtWidgets.QMenu(self.menubar)
         self.menuRexx.setObjectName("menuRexx")
-        
+
         # create menubar in in mainwindow
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -173,44 +177,42 @@ class Ui_MainWindow(object):
         self.menuRexx.addAction(self.actionAvslutt)
         self.actionTest = QtWidgets.QAction(MainWindow)
         self.actionTest.setObjectName("actionTest")
+        self.actionTest.triggered.connect(self.handleTrayIconButton)
         self.menuRexx.addAction(self.actionTest)
-        MainWindow.show()
-        
+        #MainWindow.show()
+
 
         # Popup-logic
-        self.mylist = []
+        MainWindow.show()
         for key, value in opts.items():
             if key == 'show_now':
                 for key2, value2 in value.items():
                     now2 = datetime.now().strftime('%y-%m-%d-%H-%M-%S')
-                    notification_window = True
                     key_now = 'LastNotification'
+                    # self.playsound()
                     self.trigger_popup(value2)
-                    #self.set_notification_key_value(key_now, value2['Name'], now2,self.notifications)
-                    print('Showing normal popup now...')
-            elif key == 'show_later':
+                    # self.set_notification_key_value(key_now, value2['Name'], now2)
+            '''
+            if key == 'show_later':
                 print("Done with normal popups now")
                 for key3, value3 in value.items():
                     if value3['LastNotificationSeen'] == 'True':
                         key_later = 'LastNotification'
                         now3 = datetime.now().strftime('%y-%m-%d-%H-%M-%S')
                         key4 = 1000
-                        thread = threading.Thread(target=Ui_MainWindow.popupTimer, args = (self,key3,value3))
+                        thread = threading.Thread(target=self.popupTimer, args = (key3,value3))
                         thread.start()
                         # self.set_notification_key_value(key_later, value3['Name'], now3,self.notifications)
                     else:
                         pass
-        
-
-
-        # Dont ask. 
+            '''
+        # Dont ask.
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        # No idea, but sets names (NOT VALUES) on stuff in the GUI. 
+        # No idea, but sets names (NOT VALUES) on stuff in the GUI.
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.groupBox.setTitle(_translate("MainWindow", "Frekvens"))
         self.radioButton.setText(_translate("MainWindow", "En gang i uken"))
@@ -220,12 +222,22 @@ class Ui_MainWindow(object):
         self.lineEdit.setPlaceholderText(_translate("MainWindow", "Kul text"))
         self.pushButton_2.setText(_translate("MainWindow", "Lagre"))
         self.pushButton.setText(_translate("MainWindow", "Avbryt"))
-        self.menuRexx.setTitle(_translate("MainWindow", "Rexx"))
+        self.menuRexx.setTitle(_translate("MainWindow", "Fil"))
         self.actionAvslutt.setText(_translate("MainWindow", "Avslutt"))
         self.actionAvslutt.setShortcut(_translate("MainWindow", "Ctrl+Q"))
+        self.actionTest.setText(_translate("MainWindow", "Minimer til opppgavelinjen"))
+
+    def handleTrayIconButton(self):
+        MainWindow.hide()
+        self.tray_icon.showMessage(
+            "StudyBuddy",
+            "Application was minimized to Tray",
+            QSystemTrayIcon.Information,
+            2000
+        )
 
 
-    # Closes the appliation. Called by the exit button in top left corner. 
+    # Closes the appliation. Called by the exit button in top left corner.
     def close_application(self):
         choice = QMessageBox.question(QtWidgets.QWidget(MainWindow), 'Warning',
                                      "Are you sure to quit?", QMessageBox.Yes |
@@ -246,7 +258,7 @@ class Ui_MainWindow(object):
         if self.lineEdit.isModified():
             frequency = 0
             name = str(self.lineEdit.text())
-            if ("'"  or '"' in name) :
+            if (("'"  or '"') in name) :
                 self.label_2.setText("Single and double quotes are not allowed in the name")
                 self.lineEdit.clear()
                 self.lineEdit.setModified(False)
@@ -277,40 +289,37 @@ class Ui_MainWindow(object):
                     self.lineEdit.clear()
                     self.lineEdit.setModified(False)
                 else:
-                    self.label_2.setText("That name for a topic is allready taken")
+                    self.label_2.setText("That name for a topic is already taken")
                     self.lineEdit.clear()
                     self.lineEdit.setModified(False)
-            
+
         else:
             self.label_2.setText("You need to enter something in the name field!")
             pass
 
-
-
-    def popupTimer(self,key,value):
+    def popupTimer(self, key, value):
         print("Popup will be deployed in: " + str(int(key/1000))+"...seconds"+"\n")
-        for x in range(key,-1,-1000):
+        for x in range(key, -1, -1000):
             sleep(1)
-            print("Deploying popup in" +str(x/1000)+" seconds ." +"\n")
-            print("This applies to: "+ str(value["Name"]))
+            print("Deploying popup in " + str(x/1000) +" seconds ." +"\n")
+            print("This applies to: " + str(value["Name"]))
             if x <= 0:
                 print("Showing delayed popup now!")
-                Ui_MainWindow.trigger_popup(self,value)
-        
-                
+                self.trigger_popup(value)
+
+
 
     def trigger_popup(self,value):
-        print("triggering popup...")
-        choice = QMessageBox.question(QtWidgets.QWidget(MainWindow), 'Reading reminder!',
-                                      "You need to read now. Are you gonna read this topic?", QMessageBox.Yes |
+        choice = QMessageBox.question(QtWidgets.QWidget(MainWindow), str(value["SubjectCode"]),
+                                      str(value["Name"]+ "\nAre you gonna read this?"), QMessageBox.Yes |
                                       QMessageBox.No, QMessageBox.No)
-        if (choice == QMessageBox.Yes ):
+        if choice == QMessageBox.Yes:
             now = datetime.now().strftime('%y-%m-%d-%H-%M-%S')
             self.quit_and_store(value['Name'], "True")
             pass
         else:
             pass
-        
+
     def quit_and_store(self, identifying_name, value):
         key = 'LastNotificationSeen'
         self.set_notification_key_value(key, identifying_name, value)
@@ -382,7 +391,7 @@ class Ui_MainWindow(object):
         frequency_millisecond = (timedelta(milliseconds=int(frequency)).total_seconds())*1000
         to_milli = time_delta.total_seconds()*1000
         result = to_milli - frequency_millisecond
-        if result > 0 :
+        if result > 0:
             not_dict[result] = notification
             if 'show_now' in opts.keys():
                 opts['show_now'][result] = notification
@@ -390,18 +399,14 @@ class Ui_MainWindow(object):
             else:
                 opts['show_now']= {result:notification}
             return opts
-        
+
         elif result <= 0:
             result = int(result *(-1))
             not_dict[result] = notification
             if 'show_later' in opts.keys():
-                print("Existing keys in show_later, adding:")
-                print(result)
                 opts['show_later'][result] = notification
             else:
-                print("No existing keys in show_later, adding:")
-                print(result)
-                opts['show_later']= {result:notification}
+                opts['show_later'] = {result: notification}
             return opts
 
 
@@ -417,7 +422,6 @@ class Ui_MainWindow(object):
                 opts = self.next_popup_time(notification,opts, target_key)
             else:
                 pass
-        print("Ferdig med tidsberegninger for hver notifikasjon...")
         return opts
 
     def real_playsound(self):
@@ -429,45 +433,8 @@ class Ui_MainWindow(object):
         global player_thread
         player_thread = Thread(target=self.real_playsound)
         player_thread.start()
-                 
 
-'''class popupobject(Ui_MainWindow):
-    def __init__(self,Ui_MainWindow):
-        self.value = value
-        self.trigger_popup(self,value)
-        self.show()
-    def trigger_popup(self,value):
-        print("triggering popup...")
-        self.msg = QtWidgets.QMessageBox()
-        self.msg.setText("This is a message box")
-        self.msg.setInformativeText("This is additional information")
-        self.msg.setWindowTitle("MessageBox demo")
-        self.msg.setDetailedText(str(value['Name']))
-        self.msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-        # self.choice = QMessageBox.question(QtWidgets.QWidget(MainWindow), 'Reading reminder!',
-                                      # "You need to read now. Are you gonna read this topic?", QMessageBox.Yes |
-                                      # QMessageBox.No, QMessageBox.No)
-        # self.choice.text(str(value['Name']))
-        if self.msg == QMessageBox.Yes:
-            now = datetime.now().strftime('%y-%m-%d-%H-%M-%S')
-            quit_and_store(self, value['Name'], "True")
-            print('quit application')
-        else:
-            pass
-            '''
 
-class Popupthread(QtCore.QThread):
-
-    def __init__(self,):
-        QThread.__init__(self)
-        
-
-    def __del__(self):
-        self.wait()
-
-    def run(self):
-        pass
-        
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -476,4 +443,3 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
