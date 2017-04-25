@@ -1,0 +1,2 @@
+Testing files will be deployed here, in this folder. 
+Note that the main application had to be re-structured to be possible to test, which is why the main application is placed here too. 
