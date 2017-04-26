@@ -1,0 +1,22 @@
+# ------------- TEST TUTORIAL ------------- #
+
+Run the test with this statement:
+coverage run -m py.test "path to test file"
+
+Show report:
+coverage report
+
+Show what got tested:
+coverage annotate
+
+# ------------- EXPLANATION ------------- #
+
+You can run the test one time wihtout any failurs, but when you run it a second time, 
+the notification file gets restructured randomly. 
+The way to solve this is to copy and paste new notifications into notifications.txt after every testing session:
+
+# ------------- COPY AND PASTE INTO NOTIFICATIONS.TXT ------------- #
+{"Frequency": 60000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "test22", "Registered": "17-04-15-13-56-04", "SubjectCode": "TDT4160"}
+{"Frequency": 60000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "asd2eq", "Registered": "17-03-15-17-51-55", "SubjectCode": "TDT4160"}
+{"Frequency": 604800000, "FrequencyLength": "2", "LastNotification": "", "LastNotificationSeen": "True", "Name": "GUqeqeI", "Registered": "17-02-23-13-43-31", "SubjectCode": "TDT4180"}
+{"Frequency": 86400000, "FrequencyLength": "2", "LastNotification": "17-05-05-13-52-27", "LastNotificationSeen": "True", "Name": "testtest322", "Registered": "17-03-15-13-52-27", "SubjectCode": "TDT4160", "Threadname": "thread_133000"}
