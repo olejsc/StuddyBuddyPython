@@ -964,14 +964,13 @@ class Ui_MainWindow(object):
 # argument, it simply iterates trough the lists of threads, and tell each
 # of them to stop. The method is used when close_application is called.
         if self.__threads:
-            for thread, worker in self.__threads:# note nice unpacking by Python, avoids indexing
+            for thread, worker in self.__threads:
                 thread.requestInterruption()
-                thread.quit() # this will quit **as soon as thread event loop unblocks**
-                thread.wait()  # <- so you need to wait for it to *actually* quit
+                thread.quit()
+                thread.wait()
         if self.__scrapethreads:
             for thread, worker in self.__scrapethreads:
-                # thread.requestInterruption()
-                thread.quit()  # this will quit **as soon as thread event loop unblocks**
+                thread.quit()
                 thread.wait()
         else:
             pass
@@ -1037,27 +1036,24 @@ class ScraperWorker(QObject):
         browser = webdriver.Chrome()
         browser.set_window_position(0, 0)
         browser.set_window_size(0, 0)
-        #sjekker om det er skrivd noe i tekstfeltet, og søker deretter opp dette i NTNU sin nettside med emneoversikt
         course = self.subjectcode
         self.sig_scrape_starting.emit()
         url = "http://www.ntnu.no/web/studier/emnesok#semester=2016&gjovik=true&trondheim=true&alesund=true&faculty=-1&institute=-1&multimedia=false&english=false&phd=false&courseAutumn=true&courseSpring=true&courseSummer=true&pageNo=5&season=spring&sortOrder=ascTitle&searchQueryString=" + self.subjectcode +""
         browser.get(url)
         self.sig_scrape_starting.emit()
         browser.implicitly_wait(3)
-        #Legger til alle emnekodene som finnes under søkeordet som brukeren har skriv inn i en liste:
         course_element = browser.find_elements_by_xpath("//td[@class='coursecode']")
         courses = [x.text for x in course_element]
         browser.quit()
         if ((not courses) or (course not in courses)):
             return False
-            #Sjekker at faget finnes:
         if course.upper() in courses:
             return True
         else:
             return False
 
     def scrapework(self):
-# this is the method which runs the scrapeworker. The thread must do all these
+# This is the method which runs the scrapeworker. The thread must do all these
 # methods called in here, to finish its work. Once its done, it sends a signal
 # to mainwindow, indicating it is done, and then the tread quits. 
         thread_name = QThread.currentThread().objectName()
@@ -1069,7 +1065,7 @@ class ScraperWorker(QObject):
 class Worker(QObject):
 # Effectively the same concept as Scraperworker, with Qobject as parrent
 # Contains 2 signals, each calling their respective methods in the mainwindow.
-    sig_done = pyqtSignal([dict])  # worker id: emitted at end of work()
+    sig_done = pyqtSignal([dict])
     sig_finished = pyqtSignal(str)
 
     def __init__(self, timer, noti):
