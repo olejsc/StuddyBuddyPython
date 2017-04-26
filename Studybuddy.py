@@ -1,74 +1,33 @@
-import sys
-import time
-import threading
-import datetime
-import json
-import pyglet
-import PyQt5
-import os
-import random
-import string
-import winreg
-from time import sleep
-from threading import Thread
-from datetime import *
-from selenium import webdriver
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QObject, QThread, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QSystemTrayIcon, QMessageBox
-from PyQt5.QtGui import QIcon
-
-# Mapping of objects and relations between them is commented below, to make it
-# more intuitive. The further to the left, the more reliable the objects on
-# the right are to it.Note that actions which relate to more objects are not
-# included.
-# ---------------START OF OBJECT MAPPING  -------------------------
-# Mainwindow
-#   menubar
-#       menuHelp
-#           ActionQuit
-#           ActionMinimize_to_tray
-#   statusbar
-#   top_widget
-#       tab_widget
-#           Add_notification_tab
-#               Notification_clear_button
-#               Notification_save_button
-#               add_notificaition_error_label
-#               groupBox_3
-#                   label_2
-#               groupBox_4
-#                   frequency_radiobutton_1
-#                   frequency_radiobutton_2
-#                   frequency_radiobutton_3
-#               groupBox_5
-#                   HorizontalLayout
-#                       Clear_button
-#                   subject_code_linedit
-#               groupBox_6
-#                   struggle_linedit
-#               line_2
-#           Saved_subjects_tab
-#               groupBox
-#                   list_of_notifications
-#                   saved_subjects_delete_button
-#               groupBox_2
-#           Settings_tab
-#               line_3
-#               settings_error_label
-#               settings_outer_box
-#                   settings_checkbox_mute_mode
-#                   settings_checkbox_startup
-#                   settings_inner_box
-#               settings_save_button
-# -----------------END OF OBJECT MAPPING---------------------------
+import sys          # A must for the application to run. 
+import time         # Used im popups and time calculation of popups
+import threading    # used creating thread to play popup sound.
+import datetime     # Used in time and date calculation
+import json         # Used to encode and decode from txt. file
+import pyglet       # Used to play popup sound
+import PyQt5        # The GUI framework used
+import os       # used to find relative paths and verifying existence of files      
+import random       # used to generate random thread names
+import string       # used in generation of random thread_names
+import winreg       # Used to check windows registry, add and delete key(s).
+from time import sleep      # used in popup threads to count down
+from threading import Thread        # used to play popup sound
+from datetime import *              # Various methods needed to help in time-calculation
+from selenium import webdriver      # The webscraper we use.
+from PyQt5 import QtCore, QtGui, QtWidgets      # Various essential QT-submodules in any QT application.
+from PyQt5.QtCore import QObject, QThread, pyqtSignal, pyqtSlot     # Used in threads and communication between threads and mainwindow.
+from PyQt5.QtWidgets import QSystemTrayIcon, QMessageBox        # Used in creating the popup window and system tray icon.
+from PyQt5.QtGui import QIcon       # used to show icons in our application.
 
 
 class Ui_MainWindow(object):
+# The main class, which contains the entire GUI-setup and all methods
+# beside the ones used in threads. 
 
     def setupUi(self, MainWindow):
+# When setupUi is called it setup the entire gui.
 
         def setupVariables(self, MainWindow):
+# Initializes the basic, non-QT variables which we use in our program. 
             self.notifications = self.get_all_notifications()
             self.opts = self.get_time_of_notification(self.notifications)
             self.name_dict = name_dict = {"SubjectCode": "", "Frequency": "",
@@ -85,6 +44,7 @@ class Ui_MainWindow(object):
             self.working_directory = os.getcwd()
 
         def setupFiles(self, MainWindow):
+# initializes files, and create them if they do not exist.
             self.notifications_exist = os.path.isfile("notifications.txt")
             self.log_exist = os.path.isfile("log.txt")
             self.settings_exist = os.path.isfile("settings.txt")
@@ -117,6 +77,7 @@ class Ui_MainWindow(object):
             self.gridLayout.setObjectName("gridLayout")
 
         def setupTabWidget(self, MainWindow):
+# setup the tabwidget, which hold all the tabs.
             self.tabWidget = QtWidgets.QTabWidget(self.top_widget)
             font = QtGui.QFont()
             font.setFamily("Segoe UI")
@@ -137,6 +98,7 @@ class Ui_MainWindow(object):
             self.tabWidget.setCurrentIndex(0)
 
         def setupContentNotificationTab(self, MainWindow):
+# Initializes the values and objects in the studybuddy tab.
             self.groupBox_4 = QtWidgets.QGroupBox(self.Add_notification_tab)
             self.groupBox_4.setGeometry(QtCore.QRect(20, 180, 271, 101))
             font = QtGui.QFont()
@@ -264,6 +226,7 @@ class Ui_MainWindow(object):
             self.groupBox_3.raise_()
 
         def setupContentSavedSubjectsTab(self, MainWindow):
+# setup and initializes the various objects in the manage notifications tab.
             self.groupBox = QtWidgets.QGroupBox(self.Saved_subjects_tab)
             self.groupBox.setGeometry(QtCore.QRect(80, 10, 401, 291))
             self.groupBox.setObjectName("groupBox")
@@ -294,6 +257,7 @@ class Ui_MainWindow(object):
             self.groupBox.raise_()
 
         def setupContentSettingsTab(self, MainWindow):
+# setup and initializes the various objects in the settings tab.
             self.settings_save_button = QtWidgets.QPushButton(self.Settings_tab)
             self.settings_save_button.setGeometry(QtCore.QRect(480, 380, 82, 32))
             self.settings_save_button.setStyleSheet("min-height: 30px;\n"
@@ -338,6 +302,7 @@ class Ui_MainWindow(object):
             MainWindow.setStatusBar(self.statusbar)
 
         def setupTrayIcon(self, MainWindow):
+# initializes the tray icon, and add a menu to it.
             self.tray_icon = QSystemTrayIcon()
             self.tray_icon.setIcon(QIcon("logo.png"))
             self.tray_icon.setToolTip("Studybuddy System Tray Management")
@@ -345,6 +310,9 @@ class Ui_MainWindow(object):
             self.tray_icon.tray_menu = QtWidgets.QMenu()
 
         def setupActionsObjects(self, MainWindow):
+# This method creates a lot of actions (events) in the menus in the application
+# For example, the "minimize to tray.." action gets created here, which is in
+# the file menu.
             self.actionQuit = QtWidgets.QAction(MainWindow)
             self.actionQuit.setObjectName("actionQuit")
             self.actionMinimize_to_tray = QtWidgets.QAction(MainWindow)
@@ -371,11 +339,13 @@ class Ui_MainWindow(object):
             self.tray_icon.setContextMenu(self.tray_icon.tray_menu)
 
         def setupMenuActions(self, MainWindow):
+# Add the actions to the menu, in this case, the file menu in the program.
             self.menuHelp.addAction(self.actionQuit)
             self.menuHelp.addAction(self.actionMinimize_to_tray)
             self.menubar.addAction(self.menuHelp.menuAction())
 
         def setupSettings(self, MainWindow):
+# Read settings from settings.txt, and sets values found on objects.
             if os.stat(self.setting_file).st_size == 0:
                 return
             else:
@@ -392,6 +362,10 @@ class Ui_MainWindow(object):
                         pass
 
         def setupActionConnections(self, MainWindow):
+# This method connect the actions created, to methods which shall be run, once
+# the actions are triggered. For example, clicking on show in the system tray,
+# will trigger the self.handleShowAction.Note that actions can be connected to
+# several methods.
             self.tray_icon.show_action.triggered.connect(self.handleShowAction)
             self.tray_icon.hide_action.triggered.connect(self.handleTrayIconButton)
             self.tray_icon.quit_action.triggered.connect(self.close_application)
@@ -408,10 +382,15 @@ class Ui_MainWindow(object):
             self.Clear_button.clicked.connect(self.subject_code_linedit.clear)
 
         def setupPopuplogic(self, MainWindow):
+# This methods organizes popups, and show those which are supposed to pop up
+# immediatly, while those which are delayed, gets put in their own seperate thread,
+# with a timer. References to the threads running are stored in the list
+# self.__threads, effectively making thread management much easier later.
             for key, value in self.opts.items():
                 if key == 'show_now':
                     for key2, value2 in value.items():
                         self.trigger_popup(value2)
+                        print("Triggering popup for" + str(value2['Name']))
                 if key == 'show_later':
                     for key3, value3 in value.items():
                         worker = Worker(key3, value3)
@@ -455,12 +434,16 @@ class Ui_MainWindow(object):
         setupActionConnections(self, MainWindow)        # Setup connections and triggers between actions and methods.
         QtCore.QMetaObject.connectSlotsByName(MainWindow)      # Connect slots to signals by names.
         setupPopuplogic(self, MainWindow)       # Check if popups exists, creates threads for them if nescesarry.
-
+        
+# -------------------------------------------------
 # Methods outside of setupUI are placed outside:
 # These methods are used by the program more often than
 # just the setup, but also during event handling and actions.
-
+# -------------------------------------------------
     def toogle_mute_mode_sys_tray(self):
+# Method is called upon clicking on mute in system tray menu.
+# Check if the checkbox for mute in settings are checked, and
+# toogle it, depending on what value it have.
         if self.settings_checkbox_mute_sound.isChecked() is True:
             self.settings_checkbox_mute_sound.setChecked(False)
             self.tray_icon.mute_action.setChecked(False)
@@ -469,6 +452,9 @@ class Ui_MainWindow(object):
             self.tray_icon.mute_action.setChecked(True)
 
     def toogle_lecture_mode_sys_tray(self):
+# Method is called upon clicking on disable popups in system tray menu.
+# Check if the checkbox for disable popups in settings are checked, and
+# toogle it, depending on what value it have.
         if self.settings_checkbox_lecture_mode.isChecked() is True:
             self.settings_checkbox_lecture_mode.setChecked(False)
             self.tray_icon.lecture_action.setChecked(False)
@@ -478,12 +464,21 @@ class Ui_MainWindow(object):
         
                                                             
     def handleTrayIconClicked(self, reason):
+# When system tray icon is double clicked, this method
+# calls the handleShowAction.
+# Basically, it enables double clicking to open applicaiton
+# from system tray.
         if int(reason) == 2:
             self.handleShowAction()
         else:
             pass
 
     def handleTrayIconButton(self):
+# System tray icon menu management. When minimize to tray in file --> "minimize to.."
+# or when CTRL + M, or hide in the system tray menu is triggered, this method
+# is executed. The mainwindow gets hidden, the hide-action in system tray disabled,
+# and the show-action in the same menu gets enabled.A message is sent to the OS
+# to inform that studybuddy was minimized.
         MainWindow.hide()
         self.tray_icon.show_action.setEnabled(True)
         self.tray_icon.hide_action.setEnabled(False)
@@ -493,21 +488,19 @@ class Ui_MainWindow(object):
             QSystemTrayIcon.Information,
             2000
         )
-        
-# Shows the mainwindow, and enables the system tray hide action
-# (making it possible to click on the hide-action).
 
     def handleShowAction(self):
+# Shows the mainwindow, and enables the system tray hide action
+# (making it possible to click on the hide-action).
         self.tray_icon.hide_action.setEnabled(True)
         MainWindow.activateWindow()
         MainWindow.raise_()
         MainWindow.show()
         self.tray_icon.show_action.setEnabled(False)
 
+    def close_application(self):
 # Closes the appliation. Called by the exit button in top left corner,
 # or by the exit action in the system tray menu.
-
-    def close_application(self):
         choice = QMessageBox.question(QtWidgets.QWidget(MainWindow), 'Warning',
                                      "Are you sure to quit?", QMessageBox.Yes |
                                      QMessageBox.No, QMessageBox.No)
@@ -524,6 +517,8 @@ class Ui_MainWindow(object):
         else:
             pass
 
+
+    def callback_input(self):
 # This mthod is called by Notification_save_button when it is clicked,
 # when the user wants to save a new subject. The method does a couple of
 # things: 1. It validates the input in the two line-edit fields, respectively
@@ -533,7 +528,6 @@ class Ui_MainWindow(object):
 # starts the thread, and disables any buttons and lineedits in the tab.
 # 3. It connects the signals in the scrapeworker object to methods in
 # MainWindow.
-    def callback_input(self):
         (struggle_bool, subject_code_bool) = (self.struggle_lineedit.isModified(),
                                               self.subject_code_linedit.isModified())
         if struggle_bool or subject_code_bool:
@@ -630,28 +624,27 @@ class Ui_MainWindow(object):
             self.create_postponed_workerthread(value)
 
     def create_scrapethread(self,sub_code,name_dict):
-        # Creates scrapeworker object.
+# Create  a scrapethread, for scraping on a given webpage, for the given subject
+# code. The thread is placed insise a scrapeworker object, with methods that the
+# thread uses. A reference to the thread is kept in a self.__scrapethreads list,
+# helping with maintaining controll over the thread later (on exit for example).
         scrapeworker = ScraperWorker(sub_code, name_dict)
-        # Creates Qthread.
         T = QtCore.QThread()
         T.setObjectName('thread_' + sub_code)
-        # Creates reference in list to manage thread, by appending to list.
         self.__scrapethreads.append((T, scrapeworker))
-        # Changes the thread affinity for this object (Qthread T).
         scrapeworker.moveToThread(T)
-        # Connect scrapeworker signal to validate method
         scrapeworker.sig_scrape_done.connect(self.validate)
         scrapeworker.sig_scrape_starting.connect(self.push_mainwindow_to_front)
-        # Connect scrapeworker signal to abort_worker_thread method.
         scrapeworker.sig_finished.connect(self.abort_worker_thread)
-        # Connects the thread T to scrapeworkers scrapework-method,
-        # telling it to execute method once thread have started.
         T.started.connect(scrapeworker.scrapework)
-        # Start the thread.
         T.start()
-        
 
     def create_postponed_workerthread(self,value):
+# Create  a postponed worker thread, this method is called when you click
+# postpone on a notification. The method does the same as crate_scrapethread,
+# but appends the worker object and thread to the self.__threads list,
+# and in essence, simply just loop the notification, ensuring consistency
+# for the popups. 
         random_string = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(10)])
         worker = Worker(value['Frequency'],value)
         T = QtCore.QThread()
@@ -662,12 +655,13 @@ class Ui_MainWindow(object):
         worker.sig_finished.connect(self.abort_worker_thread)
         T.started.connect(worker.work)
         T.start()
-    
 
     def write_settings(self):
 # This method is called by the save button in the settings tab.
 # What it does, is simply check the checkboxes there, and write them to a file
-# called settings.txt in working directory.
+# called settings.txt in working directory. There is also some minor code
+# which checks the registry status, if the program run, bun in stable version
+# this checkbox is disabled, and allways false, so the methos is never called.
         lecture_mode = self.settings_checkbox_lecture_mode.isChecked()
         if lecture_mode is True:
             self.tray_icon.lecture_action.setChecked(True)
@@ -698,9 +692,14 @@ class Ui_MainWindow(object):
         self.set_notification_key_value(key, identifying_name, value)
 
     def push_mainwindow_to_front(self):
+# This method is called by the webscraper signal while webscraping,
+# to force this window on top of the black cmd window and the automated
+# webbrowser that selenium creates. Basically, the method aids in keeping
+# the mainwindow on top, while the webscraping happends.
         MainWindow.activateWindow()
         MainWindow.raise_()
         MainWindow.show()
+
     def delete_notification(self):
 # This method is called everytime you delete a subject from the saved subjects
 # tab. It simply removes the nofication from the combobox in the GUI, and delete
@@ -743,12 +742,10 @@ class Ui_MainWindow(object):
         return False
 
     def create_registry_startup(self):
-
 # This method uses winreg to create a registry key in the windows registry with
 # values that point to running directory, and naming the value "Studybuddy".
 # What it effectively does,is registering the application to launch at startup
 # when windows start.
-
         try:
             key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, self.key_path,
                                  0, winreg.KEY_SET_VALUE)
@@ -791,15 +788,15 @@ class Ui_MainWindow(object):
             f.write("\n")
         f.close()
 
-    # Check if given key:value pair exist in a given dictionary, and return true if it does.
     def check_if_notification_data_exist(self,target_key,target_value,notification):
+# Check if given key:value pair exist in a given dictionary, and return true if it does.
         if notification[target_key] == target_value:
             return True
         else:
             return False
 
-    # TODO: INSERT COMMENT
     def set_notification_key_value(self,key, identifying_name, value):
+# Sets the given key in a given notification, and writing it to file.
         target_value = 'Name'
         target_notification = self.get_notification_by_key_value(target_value,identifying_name,self.notifications)
         notifications = self.notifications
@@ -819,6 +816,11 @@ class Ui_MainWindow(object):
         f.close()
 
     def next_popup_time(self,notification,opts, target_key):
+# This method calculates the popuptimes on startup for each popup, and sort
+# them in a dictionary, where every popup which have gone past their frequency,
+# is put under the key "Show_now", while the rest, which still have time before
+# they should show, are placed in "show_later" key. The method returns the
+# dictionary, called opts. 
         not_dict = {}
         frequency = notification['Frequency']
         now = datetime.now().strftime("%y-%m-%d-%H-%M-%S")
@@ -846,8 +848,9 @@ class Ui_MainWindow(object):
                 opts['show_later'] = {result: notification}
             return opts
 
-    
     def get_time_of_notification(self,notifications):
+# Used to calculate how much time for each popup, and sorting them
+# Calls the next_popup_time method to get time for each individual popup.
         opts = {}
         for notification in notifications:
             if ((notification['LastNotificationSeen'] == 'True' or notification['LastNotificationSeen'] == 'False')
@@ -862,18 +865,22 @@ class Ui_MainWindow(object):
         return opts
 
     def real_playsound(self):
+# Used by playsound(self), is basically a method which gets ran inside a thread
+# Play the sound you hear when a popup show up.
         sound = pyglet.media.load('alarm2wav.wav')
         sound.play()
         pyglet.app.run()
 
     def playsound(self):
+# Creates a thread to play the sound you hear in the popup.
+# The function the thread shall execute, is the target in the thread
         global player_thread
         player_thread = Thread(target=self.real_playsound,daemon =True)
         player_thread.start()
 
-
-
     def retrieve_checkbox_values(self):
+# Retrieve the checkbox values in the studybuddy tab, effectively validating
+# them. This method is used in the process of validating input when you click on save.
         if self.frequency_radiobutton_1.isChecked():
             frequency = 604800000
             return frequency
@@ -885,6 +892,13 @@ class Ui_MainWindow(object):
             return frequency
 
     def validate(self, notification):
+# This method is called by the webscraper, AFTER the webscraping is done.
+# First it enables all the interactive elements in the studybuddy tab,
+# making it possible to add new subjects, then if the webscraping was positive,
+# it adds the notification to the list in the saved_subjects tab,
+# and finally, it clears the input fields and set a label to inform the user
+# of the success. However, if webscraping was negative, all is cleared and user
+# see a label inform the result was negative.
         self.Notification_save_button.setEnabled(True)
         self.Notification_clear_button.setEnabled(True)
         self.Clear_button.setEnabled(True)
@@ -903,6 +917,7 @@ class Ui_MainWindow(object):
             self.subject_code_linedit.setModified(False)
             self.struggle_lineedit.clear()
             self.struggle_lineedit.setModified(False)
+            self.create_postponed_workerthread(notification)
         else:
             self.add_notificaiton_error_label.setText("The subjectcode you entered is not found.. please try again with a new one")
             self.subject_code_linedit.clear()
@@ -910,8 +925,11 @@ class Ui_MainWindow(object):
             self.struggle_lineedit.clear()
             self.struggle_lineedit.setModified(False)
 
-
     def abort_worker_thread(self,thread_name):
+# This method is called by threads (both scrapethreads and regular threads)
+# What it does is effectively search the list of threads, compare it with
+# thread name given as argument, and kill the thread if it matches, and it
+# iterates trough both lists if no thread is found
         quitted = False
         if self.__threads:
             index = 0
@@ -944,6 +962,9 @@ class Ui_MainWindow(object):
             pass
 
     def abort_workers(self):
+# This method is not unlike abort_worker_threads, but it doesnt take any
+# argument, it simply iterates trough the lists of threads, and tell each
+# of them to stop. The method is used when close_application is called.
         if self.__threads:
             for thread, worker in self.__threads:# note nice unpacking by Python, avoids indexing
                 thread.requestInterruption()
@@ -956,8 +977,11 @@ class Ui_MainWindow(object):
                 thread.wait()
         else:
             pass
-        
+
     def retranslateUi(self, MainWindow):
+# This methods sets strings to show in the GUI, and can be used to translate
+# the program to other languages. We do however only use it to set names on
+# objects in the gui, in english. 
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Studybuddy"))
         MainWindow.setWindowIcon(QIcon("logo.png"))
@@ -990,21 +1014,28 @@ class Ui_MainWindow(object):
         self.actionQuit.setShortcut(_translate("MainWindow", "Ctrl+Q"))
         self.actionMinimize_to_tray.setText(_translate("MainWindow", "Minimize to tray"))
         self.actionMinimize_to_tray.setShortcut(_translate("MainWindow", "Ctrl+M"))
-        
+
 class ScraperWorker(QObject):
-    """
-    Must derive from QObject in order to emit signals, connect slots to other signals, and operate in a QThread.
-    """
+# The scrapeworker object, containts the methods and signals the thread that
+# is created to scrape for subject codes, uses. It got 3 signals, each emitted
+# at different times to methods in the MainWindow. The reason we use Qobject as
+# parrent is because the signals can only have Qobject as parrent. 
     sig_scrape_done = pyqtSignal([dict])
     sig_scrape_starting = pyqtSignal()
     sig_finished = pyqtSignal(str)
 
     def __init__(self, subjectcode, notification):
+# Basic init of the object, with subject code to scrape and the pre-made notification
+# which was registered in the input.
         super().__init__()
         self.subjectcode = subjectcode
         self.notification = notification
         self.error_message = ""
+
     def scrapeCoursePage(self):
+# The scraping method, using selenium and webdriver from Chrome.
+# the url is requested, with subject code added at the end, and
+# the signal to push mainwindow to front is triggered during the process.
         browser = webdriver.Chrome()
         browser.set_window_position(0, 0)
         browser.set_window_size(0, 0)
@@ -1026,40 +1057,36 @@ class ScraperWorker(QObject):
             return True
         else:
             return False
-        
+
     def scrapework(self):
+# this is the method which runs the scrapeworker. The thread must do all these
+# methods called in here, to finish its work. Once its done, it sends a signal
+# to mainwindow, indicating it is done, and then the tread quits. 
         thread_name = QThread.currentThread().objectName()
         scraperesult = self.scrapeCoursePage()
         self.notification['Scraperesult']= scraperesult
         self.sig_scrape_done.emit(self.notification)
         self.sig_finished.emit(thread_name)
 
-
-    # Retrives the input entered in the lineEdit object, validates it, and if valid, write the new notification to file.
-
 class Worker(QObject):
-    """
-    Must derive from QObject in order to emit signals, connect slots to other signals, and operate in a QThread.
-    """
+# Effectively the same concept as Scraperworker, with Qobject as parrent
+# Contains 2 signals, each calling their respective methods in the mainwindow.
     sig_done = pyqtSignal([dict])  # worker id: emitted at end of work()
     sig_finished = pyqtSignal(str)
 
     def __init__(self, timer, noti):
+# Basic initialization, with passed variables upon object creation.
         super().__init__()
         self.timer = timer
         self.noti = noti
         self.isRunning = True
 
-
-
     @pyqtSlot()
     def work(self):
-        """
-        Pretend this worker method does work that takes a long time. During this time, the thread's
-        event loop is blocked, except if the application's processEvents() is called: this gives every
-        thread (incl. main) a chance to process events, which in this sample means processing signals
-        received from GUI (such as abort).
-        """
+# This method is all the popup-threads do - They count down the timer,
+# and emit signal when they are finished.If requested to quit from the mainwindow,
+# the thread recieves a interruption request signal, and quites immediatly (0.3 secs
+# to register).
         thread_name = QThread.currentThread().objectName()
         self.noti['Threadname']= str(thread_name)
         y = random.randint(30000,300000)
@@ -1082,6 +1109,9 @@ class Worker(QObject):
 
 
 if __name__ == "__main__":
+# Nescesarry method to make the application run when clicking f5, in practice.
+# Also makes it importable to other python files, effectively making it a
+# python module in practice.
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
