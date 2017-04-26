@@ -935,7 +935,6 @@ class Ui_MainWindow(object):
             index = 0
             for thread, worker in self.__threads:
                 temp_thread = thread.objectName()
-                temp_thread_name = str(temp_thread)
                 if temp_thread == thread_name:
                     thread.requestInterruption()
                     thread.quit()
@@ -949,7 +948,6 @@ class Ui_MainWindow(object):
             index = 0
             for thread, worker in self.__scrapethreads:
                 temp_thread = thread.objectName()
-                temp_thread_name = str(temp_thread)
                 if temp_thread == thread_name:
                     thread.quit()
                     thread.wait()
