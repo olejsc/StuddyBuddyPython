@@ -5,7 +5,7 @@
 pyglet == 1.2.4
 
 # Studybuddy.py: 18,19
-python-qt5 == unknown
+PyQt5 == 5.6
 
 # Studybuddy.py: 15
 selenium == 3.3.3
